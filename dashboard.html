@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- HEADER -->
+    <header class="bg-neutral-800 text-white p-4 flex items-center justify-between shadow">
+        <h1 class="text-xl font-bold">Sistema de gestión de calificaciones tributarias NUAM</h1>
+        <div class="flex items-center space-x-4">
+            <span class="text-sm">Usuario: <strong>admin</strong></span>
+            <button id="logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <!-- STATS -->
+    <main class="container mx-auto mt-4 p-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-indigo-100 p-4 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-indigo-600">POR REVISAR</h3>
+                <p class="text-3xl font-bold" id="por-revisar">0</p>
+                <p class="text-sm text-gray-400">Pendientes de validación</p>
+            </div>
+            <div class="bg-blue-100 p-4 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-blue-600">CARGAS RECIENTES</h3>
+                <p class="text-3xl font-bold" id="cargas-recientes">0</p>
+                <p class="text-sm text-gray-400">Últimas 24h</p>
+            </div>
+            <div class="bg-red-100 p-4 rounded-lg shadow">
+                <h3 class="text-lg font-semibold text-red-600">ERRORES</h3>
+                <p class="text-3xl font-bold" id="errores">0</p>
+                <p class="text-sm text-gray-400">Registros con error</p>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="mt-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-bold">Listado de calificaciones</h2>
+                
+                <!-- Export options -->
+                <div class="flex items-center space-x-4">
+                    <span>EXPORTAR A:</span>
+                    <button onclick="exportData('csv')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-4 rounded">CSV</button>
+                    <button onclick="exportData('xlsx')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">XLSX</button>
+                    <button onclick="exportData('pdf')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">PDF</button>
+                </div>
+            </div>
+            <table class="min-w-full table-auto mt-4 bg-white divide-y divide-gray-200 shadow rounded">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">ID</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Monto</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Tipo</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Estado</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Fecha</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Usuario</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="calificaciones-tbody" class="divide-y divide-gray-200">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+        <!-- ACTION BUTTONS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <button id="add-calificacion" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nueva Calificación</button>
+            <button id="mass-upload" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Carga Masiva</button>
+            <button id="view-audit" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Auditoría</button>
+        </div>
+    </main>
+
+    <!-- MODAL: Carga Masiva -->
+    <div id="mass-upload-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-1/2">
+            <h2 class="text-2xl font-bold mb-4">Carga masiva de calificaciones</h2>
+            <form id="mass-upload-form" class="space-y-4" enctype="multipart/form-data">
+                <div>
+                    <label for="upload-file" class="block text-sm font-medium">Archivo (.csv o .xlsx)</label>
+                    <input type="file" id="upload-file" name="upload-file" accept=".csv,.xlsx" class="block w-full px-3 py-2 border rounded">
+                </div>
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Subir</button>
+                <button type="button" id="close-upload-modal" class="bg-gray-500 text-white font-bold py-2 px-4 rounded">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./js/auth.js"></script>
+    <script src="./js/api.js"></script>
+</body>
+</html>
